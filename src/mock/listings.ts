@@ -1,0 +1,26 @@
+export const listings = [
+  {
+    id: "room1",
+    title: "Campus Hostel Room A",
+    type: "student",
+    price: 2500,
+    beds: 1,
+    amenities: ["WiFi", "Desk", "Wardrobe"],
+    genderPolicy: "male",
+    curfew: "10 PM",
+    images: ["/images/room-a1.jpg", "/images/room-a2.jpg"],
+    campus: "Main Campus",
+  },
+  {
+    id: "room2",
+    title: "Campus Hostel Room B",
+    type: "student",
+    price: 3000,
+    beds: 2,
+    amenities: ["WiFi", "Desk", "AC"],
+    genderPolicy: "female",
+    curfew: "10 PM",
+    images: ["/images/room-b1.jpg", "/images/room-b2.jpg"],
+    campus: "Main Campus",
+  },
+];
