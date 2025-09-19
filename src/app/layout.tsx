@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
-import AppProviders from "@/providers/AppProviders"; // AppProviders wrapper
+import AppProviders from "@/providers/AppProviders";
+
+// Initialize MSW mocks (only in browser + when enabled)
+if (typeof window !== "undefined") {
+  import("@/mocks").then(({ initMocks }) => {
+    initMocks();
+  });
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +34,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
