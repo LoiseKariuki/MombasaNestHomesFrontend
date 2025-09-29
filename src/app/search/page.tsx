@@ -3,12 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import ListingCard from "@/components/ui/ListingCard";
 import api from "@/lib/api";
+import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 // Define a proper type for listings
 type Listing = {
   id: string;
   title: string;
-  location: string;
+  location: string; // e.g. "Nairobi, Kenya"
   price: number;
   image: string;
 };
@@ -21,6 +23,7 @@ export default function SearchPage() {
         const res = await api.get<Listing[]>("/listings/search");
         return res.data;
       } catch {
+        // fallback mock data
         return [
           {
             id: "1",
@@ -41,14 +44,30 @@ export default function SearchPage() {
     },
   });
 
-  if (isLoading) return <p>Loading listings...</p>;
-  if (error) return <p>Failed to load listings.</p>;
-
   return (
-    <div className="p-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {data?.map((listing) => (
-        <ListingCard key={listing.id} listing={listing} />
-      ))}
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Search Listings</h1>
+
+      {isLoading && <p>Loading listings...</p>}
+      {error && <p>Failed to load listings.</p>}
+
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {data?.map((listing) => (
+          <div key={listing.id} className="space-y-3">
+            <ListingCard listing={listing} />
+
+            {/* Instead of modal, navigate to map page */}
+            <Link
+              href={{
+                pathname: `/listings/${listing.id}/map`,
+                query: { location: listing.location },
+              }}
+            >
+              <Button variant="primary">Show Location on Map</Button>
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
