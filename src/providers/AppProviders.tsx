@@ -6,6 +6,9 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import type { Session } from "next-auth";
 
+// ✅ Import your affiliate tracker hook
+import { useAffiliateTracker } from "@/hooks/useAffiliates";
+
 // Initialize React Query client for server-state management
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,14 +30,19 @@ type AppProvidersProps = {
   session?: Session | null;
 };
 
+function AffiliateTrackerProvider({ children }: { children: ReactNode }) {
+  // ✅ Call hook once at the top level of the app
+  useAffiliateTracker();
+  return <>{children}</>;
+}
+
 export default function AppProviders({ children, session }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Provides NextAuth session context to the entire app */}
       <SessionProvider session={session} refetchInterval={5 * 60}>
-        {/* Provides theming support (light/dark mode) */}
         <ThemeProvider attribute="class" enableSystem defaultTheme="light">
-          {children}
+          {/* ✅ Wrap children so affiliate tracking runs globally */}
+          <AffiliateTrackerProvider>{children}</AffiliateTrackerProvider>
         </ThemeProvider>
       </SessionProvider>
     </QueryClientProvider>
